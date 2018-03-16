@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>compiler</title>
+	<meta charset="UTF-8" />
+</head>
+<body>
+	<script type="module" src="./src/tokenizer.js"></script>
+	<script type="module" src="./src/parser.js"></script>
+	<script type="module" src="./src/transformer.js"></script>
+	<script type="module" src="./src/codeGenerator.js"></script>
+	<script type="module">
+		import tokenizer from './src/tokenizer.js';
+		import parser from './src/parser.js';
+		import transformer from './src/transformer.js';
+		import codeGenerator from './src/codeGenerator.js';
+		function compiler(input) {
+		  let tokens = tokenizer(input);
+		  console.log('tokens:', tokens);
+		  let ast    = parser(tokens);
+		  console.log('ast:', ast);
+		  let newAst = transformer(ast);
+		  console.log('newAst:', newAst);
+		  let output = codeGenerator(newAst);
+		  console.log('output:', output);
+
+		  return output;
+		}
+		let input  = '(add 2 (subtract 4 2))';
+		console.log('input:', input);
+		performance.mark("myCompiler-start");
+		let output = compiler(input);
+		performance.mark("myCompiler-end");
+		performance.measure(
+		  "myCompiler",
+		  "myCompiler-start",
+		  "myCompiler-end"
+		);
+		let measures = performance.getEntriesByName("myCompiler");
+		console.log(measures[0]);
+		performance.clearMarks();
+		performance.clearMeasures();
+	</script>
+</body>
+</html>
